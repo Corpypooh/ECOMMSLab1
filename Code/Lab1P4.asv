@@ -1,0 +1,33 @@
+xbox = 'xbox.mp3';
+[x,fs] = audioread(xbox);
+
+t = (0:1/fs:(length(x)-1)/fs);
+
+plot(t,x)
+xlabel('Time (seconds)')
+ylabel('Amplitude')
+title('Xbox Startup Sound Effect')
+xlim([0 t(end)])
+
+startup = x(15e5:35e5);
+t = (0:1/fs:(length(startup)-1)/fs);
+
+subplot(2,1,1)
+plot(t,startup)
+xlabel('Time (seconds)')
+ylabel('Amplitude')
+title('Xbox Startup Sound Effect')
+xlim([0 t(end)])
+
+m = length(startup);       % original sample length
+n = pow2(nextpow2(m));  % transform length
+y = fft(startup,n);        % DFT of signal
+
+f = (0:n-1)*(fs/n)/10;
+power = abs(y).^2/n;      
+
+subplot(2,1,2)
+plot(f(1:floor(n/2)),power(1:floor(n/2)))
+axis([0 300 0 45])
+xlabel('Frequency')
+ylabel('Power')

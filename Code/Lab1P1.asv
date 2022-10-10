@@ -1,0 +1,42 @@
+%ECOMMS Lab Project 1 Example
+%S. Mandayam, Rowan University
+%This program generates a 1-second duration
+%Asharp signal (466.16 Hz) with a specified SNR
+%Specify SNR
+snr=10;
+Ac = 0.5;
+fm = 466.16;
+fc = 100;
+
+%Generate Asharp signal
+t=(0:1/8e3:1.0)';
+s = Ac*sin(2*pi*fm*t); % Signal 1
+%s = 0.5*sin(2*pi*466.16*t); % Signal 2 Ac[1 + cos(2pfmt)]cos(2pfct) 
+%s = 0.5*sin(2*pi*466.16*t); % Signal 3
+%sound(s);
+
+%Compute signal variance
+var_s = cov(s);
+
+%Calculate required noise variance
+var_noise=var_s/(10^(snr/10));
+
+%Generate noise
+n=sqrt(var_noise)*randn(length(s),1);
+%sound(n);
+
+%Add signal to noise and generate message
+m=s+n;
+sound(m);
+
+subplot(2,1,1)
+plot(s)
+ylabel('s')
+xlabel('t')
+xlim([0 100])
+
+subplot(2,1,2)
+plot(m)
+ylabel('m')
+xlabel('t')
+xlim([0 100])
